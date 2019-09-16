@@ -1,7 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+
+// Imports
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+
+
 html, body {
   margin: 0;
   padding: 0;
 
   height: 100%;
+}
+
+body {
+  background-color: #EBEBEB;
+  font-family: 'Montserrat';
+}
+
+* {
+  box-sizing: inherit;
+  transition-property: all;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+
+
+/* SCROLL BAR */
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #EBEBEB;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lighten(#3a3a3a, 5%);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
 }

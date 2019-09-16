@@ -1,8 +1,9 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, IpcMain, ipcMain, shell } from 'electron';
+import * as Store from 'electron-store';
 import * as path from 'path';
 import * as url from 'url';
 
-let win, serve;
+let win, store, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
@@ -15,12 +16,16 @@ function createWindow() {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: size.width,
-    height: size.height,
+    width: 800,
+    height: 400,
     webPreferences: {
       nodeIntegration: true,
     },
+    frame: false
   });
+
+  // Create store
+  store = new Store();
 
   if (serve) {
     require('electron-reload')(__dirname, {
@@ -71,6 +76,48 @@ try {
     if (win === null) {
       createWindow();
     }
+  });
+
+  // Open external link
+  ipcMain.on('open-link', (event, arg) => {
+    shell.openExternal(arg);
+  });
+
+  // Add channel id
+  ipcMain.on('add-channel', (event, arg) => {
+
+    const channels = store.get('channels');
+
+    if (channels)
+      store.set('channels', [...channels, arg]);
+      else
+      store.set('channels', [arg]);
+  });
+
+  // Remove channel id
+  ipcMain.on('remove-channel', (event, channel) => {
+
+    const channels = store.get('channels');
+
+    if (channels)
+      store.set('channels', channels.filter(e => e !== channel));
+      else
+      store.set('channels', []);
+  });
+
+  // Get all channel ids
+  ipcMain.on('get-channels', (event) => {
+
+    const channels = store.get('channels');
+    console.log(channels);
+
+    event.sender.send('channels', channels);
+  });
+
+  // Clear channels
+  ipcMain.on('clear-channels', (event) => {
+
+    store.set('channels', []);
   });
 
 } catch (e) {

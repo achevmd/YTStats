@@ -1,16 +1,294 @@
+$red: #e1332d;
+$nav: #f6f6f6;
+$white: #fff;
+$black: #000;
+
 .container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-rows: 34px auto auto;
+  scroll-behavior: unset;
 
-  background: url(../../assets/background.jpg) no-repeat center fixed;
-  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-  background-size: cover; /* version standardisée */
+  header {
+    z-index: 100;
+    position: fixed;
+    width: calc(100% - 12px);
+    display: grid;
+    grid-template-columns: 85% auto;
+    padding: 6px;
+    background-color: $white;
 
-  .title {
+    strong {
+      -webkit-app-region: drag;
+      color: $black;
+
+      span {
+        color: $red;
+      }
+    }
+    nav {
+      justify-self: right;
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+          float: left;
+          margin-left: 8x;
+
+          img {
+            width: 12px;
+            cursor: pointer;
+            transition: 0.1s;
+            &#min {
+              padding: 9px 14px;
+            }
+            &#close {
+              padding: 4px 14px;
+              &:hover {
+                background-color: rgba(255, 0, 0, 0.5);
+                color: white;
+              }
+            }
+            &:hover {
+              background-color: darken($nav, 5%);
+            }
+            &:active {
+              background-color: darken($nav, 10%);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .content {
+    margin-top: 35px;
+  }
+
+  input {
+    width: calc(100% - 24px);
+    background-color: #dbdbdb;
+    border: 0;
+    padding: 12px;
+    color: gray;
+    font-family: "Montserrat";
+    outline: none;
+  }
+  .control {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    text-align: center;
+    padding: 10px;
+
+    div {
+      color: gray;
+      cursor: pointer;
+      // display: block;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 45px;
+      margin: 0 0 2em;
+      position: relative;
+      text-decoration: none;
+      text-transform: uppercase;
+
+      &.btn-1 {
+        background: #dbdbdb;
+        font-weight: 100;
+
+        svg {
+          height: 45px;
+          left: 0;
+          position: absolute;
+          top: 0;
+          width: 100%;
+        }
+
+        rect {
+          fill: none;
+          stroke: #fff;
+          stroke-width: 2;
+          stroke-dasharray: 422, 0;
+          transition: all 0.35s linear;
+        }
+        &:hover {
+          background: darken($red, 1.5%);
+          color: white;
+          font-weight: 900;
+          letter-spacing: 1px;
+
+          rect {
+            stroke-width: 5;
+            stroke-dasharray: 15, 310;
+            stroke-dashoffset: 48;
+            transition: all 1.35s cubic-bezier(0.19, 1, 0.22, 1);
+          }
+        }
+        &:active {
+          background: darken($red, 20%);
+          color: white;
+          font-weight: 900;
+          letter-spacing: 1px;
+
+          rect {
+            stroke-width: 20;
+            // stroke-dasharray: 15, 310;
+            // stroke-dashoffset: 48;
+            transition: all 0.01s;
+          }
+        }
+      }
+    }
+  }
+
+  .error {
+    position: fixed;
+    display: block;
+    opacity: 0;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    background: lighten($red, 3%);
+    padding: 4px;
+    font-size: 14px;
     color: white;
-    margin: 0;
-    padding: 50px 20px;
+    text-align: center;
+    transition: 0.2s;
+  }
+
+  main {
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+
+    .information {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      padding: 20px;
+
+      figure {
+        margin: 0;
+
+        img {
+          border-radius: 50%;
+          float: left;
+          width: 50px;
+          margin-right: 10px;
+        }
+
+        figcaption {
+          margin-top: 14px;
+
+          a {
+            color: black;
+            text-decoration: none;
+          }
+        }
+      }
+      .stats {
+        justify-self: right;
+
+        strong {
+          font-size: 2.2em;
+          display: block;
+        }
+
+        span {
+          color: gray;
+          font-size: 0.8em;
+          float: right;
+        }
+      }
+    }
+    .more-information {
+      display: none;
+      padding: 0px 100px 0px 100px;
+      transition: 0.2s;
+      p {
+        strong {
+          font-size: 12px;
+        }
+
+        span {
+          color: gray;
+          font-size: 12px;
+          // float: right;
+        }
+      }
+    }
+    .buttons {
+      display: block;
+      text-align: center;
+      // text-transform: uppercase;
+      font-weight: lighter;
+      font-size: 14px;
+      // border-top: 0.5px solid gray;
+      // background-color: #dbdbdb;
+      color: gray;
+      border-bottom: 0.5px solid gray;
+
+      .more-info-button {
+        cursor: pointer;
+        display: inline-block;
+        width: 80%;
+        padding: 4px 0;
+
+        &:hover {
+          color: black;
+          background-color: #dbdbdb;
+        }
+      }
+
+      .remove-button {
+        cursor: pointer;
+        display: inline-block;
+        width: 20%;
+        padding: 4px 0;
+
+        &:hover {
+          color: white;
+          background-color: rgba(255, 0, 0, 0.5);
+        }
+      }
+    }
+  }
+}
+
+$first: #e1332d;
+$second: #ca312b;
+$third: #d43e39;
+$forth: #d44540;
+$fifth: #d3524e;
+$sixth: #d36360;
+
+.progress-bar {
+  height: 6px;
+  background-image: linear-gradient(to right, $first, $second, $third, $forth, $fifth, $sixth);
+  transition: 0.4s linear;
+  transition-property: width, background-color;
+}
+
+.progress-infinite .progress-bar {
+  width: 100%;
+  background-image: linear-gradient(to right, $first, $second, $third, $forth, $fifth, $sixth);
+  animation: colorAnimation 0.5s infinite;
+}
+
+@keyframes colorAnimation {
+  0% {
+    background-image: linear-gradient(to right, $first, $second, $third, $forth, $fifth, $sixth);
+  }
+  20% {
+    background-image: linear-gradient(to right, $second, $third, $forth, $fifth, $sixth, $first);
+  }
+  40% {
+    background-image: linear-gradient(to right, $third, $forth, $fifth, $sixth, $first, $second);
+  }
+  60% {
+    background-image: linear-gradient(to right, $forth, $fifth, $sixth, $first, $second, $third);
+  }
+  100% {
+    background-image: linear-gradient(to right, $fifth, $sixth, $first, $second, $third, $forth);
   }
 }
