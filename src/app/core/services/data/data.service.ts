@@ -18,7 +18,7 @@ export class DataService {
 
       this.electron.ipcRenderer.send('get-channels');
 
-      this.electron.ipcRenderer.on('channels', (event, channelIds) => {
+      this.electron.ipcRenderer.once('channels', (event, channelIds) => {
         console.log('Getting channel ids: ', channelIds);
         this.channelIds = channelIds;
         res(channelIds)
@@ -36,29 +36,42 @@ export class DataService {
 
       // Channel id
       let channelId: string;
+      let subscriptions: any = {
+        username: null,
+        id: null
+      };
 
-      // Fetch data by username
-      this.http.get<any>(`https://www.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername=${username}&key=AIzaSyBNe0gjXBZfeEwJZNk6PsF99b8gBOSjhCk`)
-        .subscribe(data => {
+      try {
 
-          if (data.items.length)
-            channelId = data.items[0].id;
+        // Fetch data by username
+        subscriptions.username = this.http.get<any>(`https://www.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername=${username}&key=AIzaSyBNe0gjXBZfeEwJZNk6PsF99b8gBOSjhCk`)
+          .subscribe(data => {
 
-          // Fetch data by ID
-          this.http.get<any>(`https://www.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${username}&key=AIzaSyBNe0gjXBZfeEwJZNk6PsF99b8gBOSjhCk`)
-            .subscribe(data => {
+            if (data.items.length)
+              channelId = data.items[0].id;
 
-              if (data.items.length)
-                channelId = data.items[0].id;
+            // Fetch data by ID
+            subscriptions.id = this.http.get<any>(`https://www.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${username}&key=AIzaSyBNe0gjXBZfeEwJZNk6PsF99b8gBOSjhCk`)
+              .subscribe(data => {
 
-              if (channelId)
-                this.electron.ipcRenderer.send('add-channel', channelId);
+                if (data.items.length)
+                  channelId = data.items[0].id;
 
-              console.log('Channel id: ', channelId);
-              res(channelId);
-            });
-        });
-    })
+                if (channelId)
+                  this.electron.ipcRenderer.send('add-channel', channelId);
+
+                console.log('Channel id: ', channelId);
+                res(channelId);
+              })
+          });
+      }
+
+      // Catch errors
+      catch (e) {
+        rej(e);
+      }
+    });
+
   }
 
   removeChannel(channelId) {

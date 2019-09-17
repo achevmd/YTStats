@@ -84,14 +84,16 @@ try {
   });
 
   // Add channel id
-  ipcMain.on('add-channel', (event, arg) => {
+  ipcMain.on('add-channel', (event, channel) => {
 
     const channels = store.get('channels');
 
+    if (channels && channels.includes(channel)) return;
+
     if (channels)
-      store.set('channels', [...channels, arg]);
-      else
-      store.set('channels', [arg]);
+      store.set('channels', [...channels, channel]);
+    else
+      store.set('channels', [channel]);
   });
 
   // Remove channel id
@@ -101,23 +103,21 @@ try {
 
     if (channels)
       store.set('channels', channels.filter(e => e !== channel));
-      else
-      store.set('channels', []);
   });
 
   // Get all channel ids
   ipcMain.on('get-channels', (event) => {
 
     const channels = store.get('channels');
-    console.log(channels);
+    console.log('Stored channels: ', channels);
 
-    event.sender.send('channels', channels);
+    if (channels) event.sender.send('channels', channels);
   });
 
   // Clear channels
   ipcMain.on('clear-channels', (event) => {
 
-    store.set('channels', []);
+    store.delete('channels');
   });
 
 } catch (e) {

@@ -1,4 +1,5 @@
 $red: #e1332d;
+$green: #4ec04e;
 $nav: #f6f6f6;
 $white: #fff;
 $black: #000;
@@ -15,6 +16,7 @@ $black: #000;
     display: grid;
     grid-template-columns: 85% auto;
     padding: 6px;
+    padding-bottom: 1px;
     background-color: $white;
 
     strong {
@@ -64,7 +66,7 @@ $black: #000;
   }
 
   .content {
-    margin-top: 35px;
+    margin-top: 40px;
   }
 
   input {
@@ -195,9 +197,19 @@ $black: #000;
         }
 
         span {
+          display: block;
           color: gray;
           font-size: 0.8em;
           float: right;
+
+          &.green {
+            font-size: 0.7em;
+            color: $green;
+          }
+          &.red {
+            font-size: 0.7em;
+            color: $red;
+          }
         }
       }
     }
@@ -226,13 +238,15 @@ $black: #000;
       // border-top: 0.5px solid gray;
       // background-color: #dbdbdb;
       color: gray;
+      background-color: rgba(0, 0, 0, 0.05);
       border-bottom: 0.5px solid gray;
 
       .more-info-button {
         cursor: pointer;
         display: inline-block;
-        width: 80%;
+        width: calc(80% - 0.5px);
         padding: 4px 0;
+        border-right: 0.5px solid gray;
 
         &:hover {
           color: black;

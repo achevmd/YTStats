@@ -12,13 +12,16 @@ import { FormControl } from '@angular/forms';
 export class HomeComponent implements OnInit {
 
   channelInfo: any;
+  channelInfoOld: any;
   channelIds: string[];
   username = new FormControl('');
   error: boolean = false;
   loading: boolean = true;
+  math: Math = Math;
 
   constructor(private electron: ElectronService, private data: DataService) { }
 
+  // Lifecycle event
   async ngOnInit() {
 
     const stored = await this.data.getChannelIds();
@@ -26,11 +29,7 @@ export class HomeComponent implements OnInit {
 
     this.channelIds = stored;
 
-    if (stored) {
-      this.getChannels();
-    }
-
-
+    if (stored) this.getChannels();
   }
 
   // Close window
@@ -53,7 +52,7 @@ export class HomeComponent implements OnInit {
       this.error = true
       setTimeout(() => this.error = false, 2000);
       return;
-     }
+    }
 
     console.log(`${this.username.value} added and stored as ${channelId}`);
     this.getChannels();
@@ -75,18 +74,29 @@ export class HomeComponent implements OnInit {
 
     console.log('Getting channels');
 
+    // Show loading bar
     this.loading = true;
-    setTimeout(() => this.loading = false, 1000);
 
+    // Set old channel info
+    if(this.channelInfoOld) this.channelInfoOld = this.channelInfo;
+
+    // Get channels info
     this.channelInfo = await this.data.getChannelsData();
+
+    // Hide loading bar
+    this.loading = false
+
+    // Set old channel info to channel info (first time fetching channels info)
+    if (!this.channelInfoOld) this.channelInfoOld = this.channelInfo;
   }
 
+  // Clear channels
   clearChannels(e) {
 
     console.log('Clearing channels');
 
     this.loading = true;
-    setTimeout(() => this.loading = false, 1000);
+    setTimeout(() => this.loading = false, 500);
 
     this.data.clearChannels();
     this.channelInfo = null;
@@ -104,6 +114,5 @@ export class HomeComponent implements OnInit {
       e.innerHTML = 'Show less info'
       e.parentElement.previousElementSibling.style.display = 'block';
     }
-
   }
 }

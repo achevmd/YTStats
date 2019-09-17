@@ -1,5 +1,6 @@
 <div class="container">
 
+  <!-- Window frame -->
   <header>
     <strong><span>YT</span>Stats</strong>
     <nav>
@@ -19,12 +20,16 @@
 
     <!-- Button controls -->
     <div class="control">
+
+      <!-- Refresh button -->
       <div class="btn-1" (click)="getChannels()">
         <svg>
           <rect x="0" y="0" fill="none" width="100%" height="100%" />
         </svg>
         Refresh
       </div>
+
+      <!-- Clear button -->
       <div class="btn-1" (click)="clearChannels($event.target)">
         <svg>
           <rect x="0" y="0" fill="none" width="100%" height="100%" />
@@ -46,8 +51,9 @@
 
     <!-- Channels -->
     <main *ngIf="channelInfo">
-      <ng-container *ngFor="let channel of channelInfo.items">
+      <ng-container *ngFor="let channel of channelInfo.items; index as i">
 
+        <!-- Channel information -->
         <div class="information">
           <figure>
             <img [src]="channel.snippet.thumbnails.default.url" />
@@ -59,16 +65,25 @@
           <div class="stats">
             <strong>{{ channel.statistics.subscriberCount | number }}</strong>
             <span>SUBSCRIBERS</span>
+            <ng-container
+              *ngIf="channelInfoOld.items[i] && channelInfoOld.items[i].id === channel.id && channel.statistics.subscriberCount - channelInfoOld.items[i].statistics.subscriberCount !== 0 && {difference: channel.statistics.subscriberCount - channelInfoOld.items[i].statistics.subscriberCount, absoluteDifference: math.abs(channel.statistics.subscriberCount - channelInfoOld.items[i].statistics.subscriberCount) } as number">
+              <br />
+              <span class="green" *ngIf="number.difference > 0">Gained {{ number.difference | number}} {{ number.absoluteDifference == 1 ? 'sub' : 'subs' }}</span>
+              <span class="red" *ngIf="number.difference < 0">Lost {{ number.absoluteDifference | number}} {{ number.absoluteDifference == 1 ? 'sub' : 'subs' }}</span>
+            </ng-container>
           </div>
         </div>
+
+        <!-- More channel info -->
         <div class="more-information">
           <p><strong>Title: </strong><span>{{ channel.snippet.title }}</span></p>
           <p><strong>Description: </strong><span>{{ channel.snippet.description }}</span></p>
           <p><strong>Date created: </strong><span>{{ channel.snippet.publishedAt | date }}</span></p>
-          <p><strong>Total Videos: </strong><span>{{ channel.statistics.videoCount }}</span></p>
-          <p><strong>Total views: </strong><span>{{ channel.statistics.viewCount }}</span></p>
+          <p><strong>Total Videos: </strong><span>{{ channel.statistics.videoCount | number }}</span></p>
+          <p><strong>Total views: </strong><span>{{ channel.statistics.viewCount | number }}</span></p>
         </div>
 
+        <!-- Buttons -->
         <div class="buttons">
           <div class="more-info-button" (click)="toggleMoreInfo($event.target)">
             Show more info
