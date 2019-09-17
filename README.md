@@ -7,7 +7,7 @@ Created using angular-electron repo as a base.
 ## Getting Started
 
 1.
-git clone https://github.com/maximegris/angular-electron.git
+git clone https://github.com/achevmd/YTStats.git
 
 2.
 npm install
