@@ -1,8 +1,8 @@
 # Introduction
 
-YouTube Statistics Application.
-Created using angular-electron repo as a base.
+YouTube Statistics Application created using ElectronJS & Angular8.
 
+Used [angular-electron](https://github.com/maximegris/angular-electron) repo as a base.
 
 ## Getting Started
 
@@ -11,6 +11,9 @@ git clone https://github.com/achevmd/YTStats.git
 
 2.
 npm install
+
+3.
+npm install -g @angular/cli
 
 ## To build for development
 
